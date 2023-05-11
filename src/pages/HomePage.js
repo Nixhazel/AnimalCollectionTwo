@@ -1,17 +1,26 @@
-import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, View } from "react-native";
 import SearchBar from "../components/SearchBar";
 import data from "../../assets/data/animals.json";
 import AnimalList from "../components/AnimalList";
 import FavoriteButton from "../components/FavoriteButton";
-import { useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomePage = ({ navigation }) => {
 	const [animals, setAnimals] = useState([]);
-     const [searchQuery, setSearchQuery] = useState("");
+	const [searchQuery, setSearchQuery] = useState("");
+	const [favorites, setFavorites] = useState([]);
 
-	const favoriteAnimals = useSelector((state) => state.favorites);
+	const getFavoriteAnimals = async () => {
+		try {
+			const jsonValue = await AsyncStorage.getItem("favorites");
+			if (jsonValue !== null) {
+				setFavorites(JSON.parse(jsonValue));
+			}
+		} catch (e) {
+			console.log("Error getting favorite animals:", e);
+		}
+	};
 
 	const loadAnimals = async () => {
 		await setAnimals(data);
@@ -28,32 +37,25 @@ const HomePage = ({ navigation }) => {
 	};
 
 	useEffect(() => {
+		getFavoriteAnimals();
 		loadAnimals();
-	}, []);
+	}, [favorites]);
 
 	return (
 		<View>
 			<SearchBar searchQuery={searchQuery} setSearchQuery={handleSearch} />
-			{favoriteAnimals.length > 0 && (
-				<FavoriteButton
-					onPress={() =>
-						navigation.navigate("FavoriteList")
-					}
-				/>
+			{favorites.length > 0 && (
+				<FavoriteButton onPress={() => navigation.navigate("FavoriteList")} />
 			)}
 			<FlatList
 				data={filteredAnimals}
 				renderItem={({ item }) => (
-					<AnimalList
-						animal={item}
-						onPress={() => navigateToDetails(item)}
-					/>
+					<AnimalList animal={item} onPress={() => navigateToDetails(item)} />
 				)}
 				keyExtractor={(item) => item.name}
 			/>
 		</View>
 	);
 };
-
 
 export default HomePage;
