@@ -2,13 +2,15 @@ import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 const AnimalList = ({ animal, onPress }) => {
+	
+	// console.log(typeof animal.img);
 	return (
 		<TouchableOpacity style={styles.container} onPress={onPress}>
-			{/* <Image
-				// source={{ uri: `../../assets/animals/${animal.img}` }}
-				// source={require("../../assets/images/heart-filled.png")}
+			<Image
+				// source={{ uri: `../../assets/animals/${animal.img}`}}
+				// source={require(`../../assets/animals/${animal.img}`)}
 				style={styles.image}
-			/> */}
+			/>
 			<View style={styles.detailsContainer}>
 				<Text style={styles.title}>{animal.name}</Text>
 			</View>

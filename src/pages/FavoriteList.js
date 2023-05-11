@@ -19,7 +19,7 @@ const FavoriteList = ({ navigation }) => {
 						<AnimalList
 							key={animal.name}
 							animal={animal}
-							// imageName={animal.img}
+						
 							onPress={() => navigation.navigate("DetailsPage", { animal })}
 						/>
 					))}
