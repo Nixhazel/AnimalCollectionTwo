@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
-
 import { addToFavorites, removeFromFavorites } from "../redux/actions";
 
 const DetailsPage = ({ route }) => {

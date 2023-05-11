@@ -1,6 +1,5 @@
-import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, View } from "react-native";
 import SearchBar from "../components/SearchBar";
 import data from "../../assets/data/animals.json";
 import AnimalList from "../components/AnimalList";
