@@ -1,26 +1,76 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { addToFavorites, removeFromFavorites } from "../redux/actions";
 
 const DetailsPage = ({ route }) => {
 	const dispatch = useDispatch();
 	const { animal } = route.params;
-	const isFavorite = useSelector((state) =>
-		state.favorites.some((fav) => fav.name === animal.name)
-	);
+	const [isFavorite, setIsFavorite] = useState(false);
+	// const isFavorite = useSelector((state) =>
+	// 	state.favorites.some((fav) => fav.name === animal.name)
+	// );
 
-	const toggleFavoriteHandler = () => {
-		if (isFavorite) {
-			dispatch(removeFromFavorites(animal));
-			
-		} else {
-			dispatch(addToFavorites(animal));
-			
+	const loadFavorites = async () => {
+		try {
+			const favorites = await AsyncStorage.getItem("favorites");
+			if (favorites !== null) {
+				dispatch(setFavorites(JSON.parse(favorites)));
+			}
+		} catch (error) {
+			console.log(error);
 		}
 	};
+
+	// const toggleFavoriteHandler = () => {
+	// 	if (isFavorite) {
+	// 		dispatch(removeFromFavorites(animal));
+
+	// 	} else {
+	// 		dispatch(addToFavorites(animal));
+
+	// 	}
+	// };
+
+	const toggleFavoriteHandler = () => {
+		setIsFavorite(!isFavorite);
+		if (isFavorite) {
+			// dispatch(removeFromFavorites(animal));
+			AsyncStorage.getItem("favorites").then((favorites) => {
+				const updatedFavorites = JSON.parse(favorites).filter(
+					(fav) => fav.name !== animal.name
+				);
+				AsyncStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+			});
+		} else {
+			// dispatch(addToFavorites(animal));
+			AsyncStorage.getItem("favorites").then((favorites) => {
+				const updatedFavorites = favorites
+					? JSON.parse(favorites).concat(animal)
+					: [animal];
+				AsyncStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+			});
+		}
+	};
+
+	useEffect(() => {
+		const fetchFavorites = async () => {
+			try {
+				const storedFavorites = await AsyncStorage.getItem("favorites");
+				let favorites = [];
+				if (storedFavorites !== null) {
+					favorites = JSON.parse(storedFavorites);
+				}
+				setIsFavorite(favorites.some((fav) => fav.name === animal.name));
+			} catch (error) {
+				console.log("error", error);
+			}
+		};
+		fetchFavorites();
+		loadFavorites();
+	}, []);
 
 	return (
 		<View style={styles.container}>

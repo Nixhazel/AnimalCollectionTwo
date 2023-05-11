@@ -5,13 +5,27 @@ import SearchBar from "../components/SearchBar";
 import data from "../../assets/data/animals.json";
 import AnimalList from "../components/AnimalList";
 import FavoriteButton from "../components/FavoriteButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from "react-redux";
 
 const HomePage = ({ navigation }) => {
 	const [animals, setAnimals] = useState([]);
-     const [searchQuery, setSearchQuery] = useState("");
+	const [searchQuery, setSearchQuery] = useState("");
+	const [favorites, setFavorites] = useState([]);
+	// const [isFavorite, setIsFavorite] = useState([]);
 
-	const favoriteAnimals = useSelector((state) => state.favorites);
+	// const favoriteAnimals = useSelector((state) => state.favorites);
+
+	const getFavoriteAnimals = async () => {
+		try {
+			const jsonValue = await AsyncStorage.getItem("favorites");
+			if (jsonValue !== null) {
+				setFavorites(JSON.parse(jsonValue));
+			}
+		} catch (e) {
+			console.log("Error getting favorite animals:", e);
+		}
+	};
 
 	const loadAnimals = async () => {
 		await setAnimals(data);
@@ -28,32 +42,46 @@ const HomePage = ({ navigation }) => {
 	};
 
 	useEffect(() => {
+		getFavoriteAnimals();
+		// const fetchFavorites = async () => {
+		// 	try {
+		// 		const storedFavorites = await AsyncStorage.getItem("favorites");
+		// 		let favorites = [];
+		// 		if (storedFavorites !== null) {
+		// 			favorites = JSON.parse(storedFavorites);
+		// 			setIsFavorite(true);
+		// 			return;
+		// 		} else if (favorites.length == 0) {
+		// 			setIsFavorite(false);
+		// 		}
+		// 		// if (favorites.length > 0) {
+		// 		// 	setIsFavorite(true);
+		// 		// } else {
+		// 		//
+		// 		// }
+		// 	} catch (error) {
+		// 		console.log("error", error);
+		// 	}
+		// };
+		// fetchFavorites();
 		loadAnimals();
-	}, []);
+	}, [favorites]);
 
 	return (
 		<View>
 			<SearchBar searchQuery={searchQuery} setSearchQuery={handleSearch} />
-			{favoriteAnimals.length > 0 && (
-				<FavoriteButton
-					onPress={() =>
-						navigation.navigate("FavoriteList")
-					}
-				/>
+			{favorites.length > 0 && (
+				<FavoriteButton onPress={() => navigation.navigate("FavoriteList")} />
 			)}
 			<FlatList
 				data={filteredAnimals}
 				renderItem={({ item }) => (
-					<AnimalList
-						animal={item}
-						onPress={() => navigateToDetails(item)}
-					/>
+					<AnimalList animal={item} onPress={() => navigateToDetails(item)} />
 				)}
 				keyExtractor={(item) => item.name}
 			/>
 		</View>
 	);
 };
-
 
 export default HomePage;
