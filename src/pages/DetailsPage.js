@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { addToFavorites, removeFromFavorites } from "../redux/actions";
 
 const DetailsPage = ({ route }) => {
 	const dispatch = useDispatch();
 	const { animal } = route.params;
 	const [isFavorite, setIsFavorite] = useState(false);
-	// const isFavorite = useSelector((state) =>
-	// 	state.favorites.some((fav) => fav.name === animal.name)
-	// );
 
 	const loadFavorites = async () => {
 		try {
@@ -24,20 +20,9 @@ const DetailsPage = ({ route }) => {
 		}
 	};
 
-	// const toggleFavoriteHandler = () => {
-	// 	if (isFavorite) {
-	// 		dispatch(removeFromFavorites(animal));
-
-	// 	} else {
-	// 		dispatch(addToFavorites(animal));
-
-	// 	}
-	// };
-
 	const toggleFavoriteHandler = () => {
 		setIsFavorite(!isFavorite);
 		if (isFavorite) {
-			// dispatch(removeFromFavorites(animal));
 			AsyncStorage.getItem("favorites").then((favorites) => {
 				const updatedFavorites = JSON.parse(favorites).filter(
 					(fav) => fav.name !== animal.name
@@ -45,7 +30,6 @@ const DetailsPage = ({ route }) => {
 				AsyncStorage.setItem("favorites", JSON.stringify(updatedFavorites));
 			});
 		} else {
-			// dispatch(addToFavorites(animal));
 			AsyncStorage.getItem("favorites").then((favorites) => {
 				const updatedFavorites = favorites
 					? JSON.parse(favorites).concat(animal)

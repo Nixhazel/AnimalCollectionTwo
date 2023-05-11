@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
 import AnimalList from "../components/AnimalList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const FavoriteList = ({ navigation }) => {
 	const [favorites, setFavorites] = useState([]);
-	const favoriteAnimals = useSelector((state) => state.favorites);
 
 	const getFavoriteAnimals = async () => {
 		try {

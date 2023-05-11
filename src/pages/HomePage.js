@@ -1,20 +1,15 @@
-import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, View } from "react-native";
 import SearchBar from "../components/SearchBar";
 import data from "../../assets/data/animals.json";
 import AnimalList from "../components/AnimalList";
 import FavoriteButton from "../components/FavoriteButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useSelector } from "react-redux";
 
 const HomePage = ({ navigation }) => {
 	const [animals, setAnimals] = useState([]);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [favorites, setFavorites] = useState([]);
-	// const [isFavorite, setIsFavorite] = useState([]);
-
-	// const favoriteAnimals = useSelector((state) => state.favorites);
 
 	const getFavoriteAnimals = async () => {
 		try {
@@ -43,27 +38,6 @@ const HomePage = ({ navigation }) => {
 
 	useEffect(() => {
 		getFavoriteAnimals();
-		// const fetchFavorites = async () => {
-		// 	try {
-		// 		const storedFavorites = await AsyncStorage.getItem("favorites");
-		// 		let favorites = [];
-		// 		if (storedFavorites !== null) {
-		// 			favorites = JSON.parse(storedFavorites);
-		// 			setIsFavorite(true);
-		// 			return;
-		// 		} else if (favorites.length == 0) {
-		// 			setIsFavorite(false);
-		// 		}
-		// 		// if (favorites.length > 0) {
-		// 		// 	setIsFavorite(true);
-		// 		// } else {
-		// 		//
-		// 		// }
-		// 	} catch (error) {
-		// 		console.log("error", error);
-		// 	}
-		// };
-		// fetchFavorites();
 		loadAnimals();
 	}, [favorites]);
 
