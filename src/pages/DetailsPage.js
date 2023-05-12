@@ -9,17 +9,6 @@ const DetailsPage = ({ route }) => {
 	const { animal } = route.params;
 	const [isFavorite, setIsFavorite] = useState(false);
 
-	const loadFavorites = async () => {
-		try {
-			const favorites = await AsyncStorage.getItem("favorites");
-			if (favorites !== null) {
-				dispatch(setFavorites(JSON.parse(favorites)));
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
 	const toggleFavoriteHandler = () => {
 		setIsFavorite(!isFavorite);
 		if (isFavorite) {
@@ -53,7 +42,6 @@ const DetailsPage = ({ route }) => {
 			}
 		};
 		fetchFavorites();
-		loadFavorites();
 	}, []);
 
 	return (
