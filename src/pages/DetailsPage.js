@@ -48,7 +48,9 @@ const DetailsPage = ({ route }) => {
 		<View style={styles.container}>
 			<Image
 				style={styles.image}
-				source={{ uri: `https://reactnative.dev/img/tiny_logo.png` }}
+				source={{
+					uri: `https://kzthazuevorstaspeqnt.supabase.co/storage/v1/object/public/animals/${animal.img}`,
+				}}
 			/>
 			<Text style={styles.title}>{animal.name}</Text>
 			<Text style={styles.description}>

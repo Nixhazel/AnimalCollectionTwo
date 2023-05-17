@@ -1,14 +1,13 @@
-import React from 'react'
+import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 const AnimalList = ({ animal, onPress }) => {
-	
-	// console.log(typeof animal.img);
 	return (
 		<TouchableOpacity style={styles.container} onPress={onPress}>
 			<Image
-				// source={{ uri: `../../assets/animals/${animal.img}`}}
-				// source={require(`../../assets/animals/${animal.img}`)}
+				source={{
+					uri: `https://kzthazuevorstaspeqnt.supabase.co/storage/v1/object/public/animals/${animal.img}`,
+				}}
 				style={styles.image}
 			/>
 			<View style={styles.detailsContainer}>
@@ -48,4 +47,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default AnimalList
+export default AnimalList;
