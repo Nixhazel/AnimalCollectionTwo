@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const DetailsPage = ({ route }) => {
+const DetailsPage = ({ route, navigation }) => {
 	const dispatch = useDispatch();
 	const { animal } = route.params;
 	const [isFavorite, setIsFavorite] = useState(false);
@@ -42,7 +42,11 @@ const DetailsPage = ({ route }) => {
 			}
 		};
 		fetchFavorites();
-	}, []);
+
+		navigation.setOptions({
+			headerTitle: animal.name,
+		});
+	}, [animal.name, navigation]);
 
 	return (
 		<View style={styles.container}>
