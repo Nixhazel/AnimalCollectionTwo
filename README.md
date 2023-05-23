@@ -23,7 +23,7 @@ To run the app locally, follow these steps:
 
 ## Data Source
 
-The app uses the `animal.json` file as the data source for the list of animals. Each animal object in the JSON file contains a name and an image name, which is used to fetch the corresponding image from the `assets/images` folder.
+The app uses the `animal.json` file as the data source for the list of animals. Each animal object in the JSON file contains a name and an image name, which is used to fetch the corresponding image from a url.
 
 ## Technologies Used
 
